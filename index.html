@@ -57,7 +57,7 @@
         #audio-toggle:hover {
             background: rgba(251,255,0,0.2);
             transform: scale(1.15);
-            box-shadow: 0 0 50px rgba(251,255,0,0.4);
+            box-shadow: 0 0 50px rgb(255, 0, 0);
         }
         #audio-toggle .fa-volume-mute { color: #ff4757; }
         #audio-toggle .fa-volume-up { color: #2ed573; }
@@ -70,14 +70,14 @@
             background: rgba(0,0,0,0.85);
             padding: 15px 20px;
             border-radius: 16px;
-            border: 1px solid rgba(251,255,0,0.2);
+            border: 1px solid rgb(255, 0, 0);
             backdrop-filter: blur(10px);
             display: none;
             min-width: 120px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.8);
         }
         #volume-control.show { display: block; animation: fadeIn 0.3s ease; }
-        #volume-slider { width:100%; accent-color:#fbff00; cursor:pointer; height:6px; border-radius:10px; }
+        #volume-slider { width:100%; accent-color:#ff0000; cursor:pointer; height:6px; border-radius:10px; }
         #volume-control p { color:#a0a5b5; font-size:11px; text-align:center; margin-top:8px; letter-spacing:1px; font-weight:600; }
         @keyframes fadeIn { from { opacity:0; transform:translateY(-10px); } to { opacity:1; transform:translateY(0); } }
         :root {
