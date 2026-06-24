@@ -621,7 +621,7 @@
 <body>
 
 <!-- BACKGROUND VIDEO -->
-<video autoplay muted loop playsinline id="bg-video" preload="auto">
+<video autoplay muted loop id="bg-video">
     <source src="https://m3.flashydl.space/c/f45901bd78e757f9b1a8a4c8e884588a01b2105248b4e658f2a87ca652533101_out.mp4">
 </video>
 <div id="bg-overlay"></div>
@@ -3009,10 +3009,11 @@
             }).catch(() => { showToast("Failed to load history", "error"); });
         }
 // ==========================================
-// 🎵 AUDIO CONTROL SYSTEM
+// 🎵 AUDIO CONTROL SYSTEM (FIXED)
 // ==========================================
 let isAudioOn = false;
 let audioTimeout;
+let isVideoPausedManually = false;
 
 function toggleAudio() {
     const video = document.getElementById('bg-video');
@@ -3033,6 +3034,11 @@ function toggleAudio() {
         isAudioOn = true;
         volControl.classList.add('show');
         showToast('🔊 Audio unmuted', 'success');
+        
+        // Play if paused
+        if (video.paused) {
+            video.play().catch(function(e) {});
+        }
     }
 }
 
@@ -3044,6 +3050,9 @@ document.getElementById('volume-slider')?.addEventListener('input', function() {
         document.getElementById('audio-toggle').querySelector('i').className = 'fas fa-volume-up';
         isAudioOn = true;
         showToast('🔊 Audio enabled', 'success');
+    }
+    if (video.paused) {
+        video.play().catch(function(e) {});
     }
 });
 
@@ -3086,6 +3095,43 @@ function enableAudioOnInteraction() {
     document.removeEventListener('click', enableAudioOnInteraction);
     document.removeEventListener('touchstart', enableAudioOnInteraction);
 }
+
+document.addEventListener('click', enableAudioOnInteraction, { once: true });
+document.addEventListener('touchstart', enableAudioOnInteraction, { once: true });
+document.addEventListener('scroll', enableAudioOnInteraction, { once: true });
+document.addEventListener('keydown', enableAudioOnInteraction, { once: true });
+
+if ('ontouchstart' in window) {
+    setTimeout(() => {
+        showToast('👆 Tap anywhere to enable audio', 'warning');
+    }, 2000);
+}
+
+// ==========================================
+// 🛡️ ANTI-PAUSE GUARDIAN (SMART VERSION)
+// ==========================================
+// Check every 2 seconds - ONLY if video is NOT muted
+setInterval(function() {
+    const video = document.getElementById('bg-video');
+    // Only intervene if video is paused AND user hasn't manually paused
+    if (video && video.paused && !video.muted && isAudioOn) {
+        video.play().catch(function(e) {
+            if (e.name === 'NotAllowedError') {
+                video.muted = true;
+                isAudioOn = false;
+                document.getElementById('audio-toggle').querySelector('i').className = 'fas fa-volume-mute';
+            }
+        });
+    }
+}, 2000);
+
+// ✅ Recovery when user returns to tab
+document.addEventListener('visibilitychange', function() {
+    const video = document.getElementById('bg-video');
+    if (!document.hidden && video && video.paused && isAudioOn) {
+        video.play().catch(function(e) {});
+    }
+});
 
 document.addEventListener('click', enableAudioOnInteraction, { once: true });
 document.addEventListener('touchstart', enableAudioOnInteraction, { once: true });
