@@ -616,9 +616,44 @@
             .copy-box { flex-direction: column; align-items: flex-start; gap: 15px; }
             .copy-box button { width: 100% !important; }
         }
+
+        #payment-lock {
+    position: fixed;
+    inset: 0;
+    background: #0b0b0b;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999999;
+}
+
+.payment-box {
+    background: #181818;
+    padding: 40px;
+    border-radius: 15px;
+    text-align: center;
+    color: white;
+}
+
+.payment-box h1 {
+    color: red;
+}
+
+.payment-box b {
+    color: #00ff99;
+}
+
     </style>
 <script src="https://apis.google.com/js/api.js?onload=__iframefcb937658" type="text/javascript" charset="UTF-8" gapi_processed="true"></script></head>
 <body>
+
+    <div id="payment-lock">
+    <div class="payment-box">
+        <h1>Website Payment is Not Received</h1>
+        <p>Websites is locked.</p>
+        <p>Please contact your devloper <b>@FELIX</b></p>
+    </div>
+</div>
 
 <!-- BACKGROUND VIDEO -->
 <video autoplay muted loop id="bg-video">
