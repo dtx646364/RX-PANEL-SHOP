@@ -1156,6 +1156,110 @@ html,body{
 @media(max-width:650px){#page-home .rx-home-top{flex-direction:column;align-items:stretch}.rx-home-top .search-container{width:100%!important}.rx-home-heading{justify-content:flex-start}.panel-grid{grid-template-columns:1fr!important}.page-content#page-home{padding-top:78px!important}.promo-slider,.promo-card{height:180px!important}}
 </style>
 
+
+<style id="rx-final-sidebar-toggle">
+/* RX PANEL: one sidebar toggle button, initially hidden sidebar */
+#main-app .rx-sidebar{
+  transform:translateX(-100%) !important;
+  transition:transform .25s ease !important;
+  z-index:1500 !important;
+}
+#main-app .rx-sidebar.mobile-open{
+  transform:translateX(0) !important;
+}
+#main-app .navbar{
+  left:0 !important;
+  width:100% !important;
+}
+#main-app .page-content{
+  margin-left:0 !important;
+}
+#main-app .marquee-container{
+  left:0 !important;
+  width:100% !important;
+}
+#main-app .navbar .menu-btn{
+  display:flex !important;
+  width:42px !important;
+  height:42px !important;
+  flex:0 0 42px !important;
+  order:0 !important;
+  align-items:center !important;
+  justify-content:center !important;
+  margin:0 !important;
+  padding:0 !important;
+  border-radius:12px !important;
+  background:linear-gradient(145deg,#171717,#080808) !important;
+  border:1px solid rgba(255,210,26,.28) !important;
+  color:#d7ff00 !important;
+  z-index:1600 !important;
+}
+#main-app .navbar .nav-right{
+  display:flex !important;
+  align-items:center !important;
+  gap:9px !important;
+}
+#main-app .navbar .menu-btn::before{
+  content:"☰" !important;
+  font-family:Arial,sans-serif !important;
+  font-size:24px !important;
+  line-height:1 !important;
+  color:#d7ff00 !important;
+}
+#main-app .navbar .menu-btn i{display:none !important;}
+@media(max-width:900px){
+  #main-app .navbar{left:0 !important;width:100% !important;}
+  #main-app .page-content{margin-left:0 !important;}
+}
+
+/* === BACKDROP BLUR + X CLOSE BUTTON === */
+#rx-sidebar-overlay{
+  position:fixed; inset:0; z-index:1490;
+  background:rgba(0,0,0,.45);
+  backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+  opacity:0; visibility:hidden; pointer-events:none;
+  transition:opacity .25s ease, visibility .25s ease;
+}
+#rx-sidebar-overlay.active{
+  opacity:1; visibility:visible; pointer-events:auto;
+}
+.rx-side-close{
+  position:absolute; top:12px; right:12px;
+  width:32px; height:32px; border-radius:50%;
+  border:1px solid rgba(255,255,255,.18);
+  background:rgba(255,255,255,.06);
+  color:#fff; font-size:18px; line-height:1;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; z-index:5;
+  transition:all .2s ease;
+  padding:0; margin:0;
+}
+.rx-side-close:hover{
+  background:rgba(255,42,95,.2);
+  border-color:rgba(255,42,95,.5);
+  color:#ff687c;
+  transform:scale(1.08);
+}
+.rx-side-brand{ position:relative !important; padding-right:42px !important; }
+
+/* Deposit amount chips */
+.rx-amt-chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 18px}
+.rx-amt-chip{
+  min-width:58px;padding:8px 12px;border-radius:10px;
+  border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.35);
+  color:#d8d1df;font-size:13px;font-weight:700;cursor:pointer;transition:.2s;
+}
+.rx-amt-chip:hover,.rx-amt-chip.active{
+  border-color:rgba(184,255,0,.55);color:#fff;
+  background:rgba(184,255,0,.12);box-shadow:0 0 12px rgba(184,255,0,.15);
+}
+.rx-amt-wrap{position:relative}
+.rx-amt-wrap .rx-rs{
+  position:absolute;left:14px;top:50%;transform:translateY(-50%);
+  color:#8cff00;font-weight:800;font-size:16px;pointer-events:none;
+}
+.rx-amt-wrap input{padding-left:36px !important}
+</style>
 </head>
 <body>
 <canvas id="rx-star-canvas" aria-hidden="true"></canvas>
@@ -1211,6 +1315,8 @@ html,body{
 <!-- MAIN APP SCREEN -->
 <div id="main-app" style="display: none;">
 
+    <!-- SIDEBAR BACKDROP OVERLAY -->
+    <div id="rx-sidebar-overlay"></div>
     <!-- LEFT SIDEBAR -->
     <aside class="rx-sidebar" id="rx-sidebar">
         <div class="rx-side-brand">
@@ -1219,6 +1325,7 @@ html,body{
                 <div class="rx-side-brand-title">RX PANEL</div>
                 <div class="rx-side-brand-sub">Seller console</div>
             </div>
+            <button type="button" class="rx-side-close" id="rx-side-close" aria-label="Close sidebar">&times;</button>
         </div>
         <div class="rx-side-user">
             <div class="rx-side-user-top">
@@ -1266,8 +1373,8 @@ html,body{
         <div class="nav-right">
             <!-- Dynamic Reseller Badge -->
             <div class="balance-badge reseller-nav-badge" id="navbar-reseller-badge"><i class="fas fa-user-tie"></i> Reseller</div>
+            <button class="menu-btn" id="menu-toggle" aria-label="Toggle sidebar"><i class="fas fa-bars"></i></button>
             <div class="balance-badge"><i class="fas fa-wallet"></i>  $ <span id="nav-balance">0.00</span></div>
-            <button class="menu-btn" id="menu-toggle"><i class="fas fa-bars"></i></button>
         </div>
         <!-- DROPDOWN MENU -->
         <div class="dropdown glass" id="dropdown-menu">
@@ -1498,17 +1605,34 @@ html,body{
                 <h3 style="color:white; margin-bottom: 15px; font-size: 22px; font-weight:800; text-transform:uppercase; letter-spacing:1px; display: flex; align-items: center; gap: 10px;">
                     <i class="fas fa-bolt" style="color:var(--neon-cyan); font-size: 28px; filter: drop-shadow(0 0 10px var(--neon-cyan));"></i> Instant UPI 
                 </h3>
-                <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 30px; line-height: 1.6;">
+                <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 12px; line-height: 1.6;">
                     Pay via UPI QR / PhonePe / GPay. Wallet balance updates automatically after payment.
                 </p>
-                <div class="input-group">
-                    <input id="add-amount" class="premium-input" placeholder="Enter Amount ( $ )" required="" type="number">
+                <div style="background:rgba(255,184,0,0.1); border:1px solid rgba(255,184,0,0.35); border-radius:12px; padding:12px 14px; margin-bottom:18px; text-align:left;">
+                    <p style="color:var(--warning); font-size:12px; font-weight:800; margin:0 0 6px 0;"><i class="fas fa-exclamation-triangle"></i> IMPORTANT / जरूरी</p>
+                    <p style="color:#fff; font-size:13px; margin:0 0 4px 0; line-height:1.4;">Payment complete hone ke baad <strong style="color:var(--success);">I Paid — Verify Now</strong> pe click karein.</p>
+                    <p style="color:var(--text-muted); font-size:12px; margin:0; line-height:1.35;">After paying, click <strong style="color:var(--success);">I Paid — Verify Now</strong> to confirm your deposit.</p>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                    <label style="color:#fff;font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;">Deposit Amount</label>
+                    <span style="color:var(--text-muted);font-size:11px;">(Min: ₹1.00 INR)</span>
+                </div>
+                <div class="input-group rx-amt-wrap">
+                    <span class="rx-rs">₹</span>
+                    <input id="add-amount" class="premium-input" placeholder="1" required="" type="number" min="1" step="1" value="1">
+                </div>
+                <div class="rx-amt-chips" id="rx-amt-chips">
+                    <button type="button" class="rx-amt-chip active" data-amt="1">₹1</button>
+                    <button type="button" class="rx-amt-chip" data-amt="100">₹100</button>
+                    <button type="button" class="rx-amt-chip" data-amt="300">₹300</button>
+                    <button type="button" class="rx-amt-chip" data-amt="500">₹500</button>
+                    <button type="button" class="rx-amt-chip" data-amt="1000">₹1000</button>
                 </div>
                 <div class="input-group">
                     <input id="add-phone" class="premium-input" placeholder="Your WhatsApp Number" required="" type="tel">
                 </div>
-                <button class="btn btn-purchase premium-btn" id="btn-submit-payment" style="width: 100%; margin-top: 10px;">
-                    PAY INSTANTLY <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
+                <button class="btn btn-purchase premium-btn" id="btn-submit-payment" style="width: 100%; margin-top: 10px; background:linear-gradient(90deg,#3b82f6,#a855f7); border:none; box-shadow:0 0 18px rgba(168,85,247,.35);">
+                    PROCEED TO PAY NOW <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
                 </button>
 
                 <!-- ORDER STATUS CARD -->
@@ -1936,10 +2060,16 @@ html,body{
 <div class="modal-overlay hidden" id="modal-fam-pay">
     <div class="modal glass" style="max-width:420px; text-align:center; padding:24px;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-            <h3 style="color:#fff; font-size:18px; margin:0;"><i class="fas fa-bolt" style="color:var(--neon-cyan);"></i> Pay with UPI : important payment karne ke baad - i PAID VERIFIED NOW - click kare........!!!</h3>
+            <h3 style="color:#fff; font-size:18px; margin:0;"><i class="fas fa-bolt" style="color:var(--neon-cyan);"></i> Pay with UPI</h3>
             <button type="button" onclick="window.closeFamPayModal()" style="background:none;border:none;color:#fff;font-size:22px;cursor:pointer;line-height:1;">&times;</button>
         </div>
-        <p style="color:var(--text-muted); font-size:13px; margin-bottom:12px;">Scan QR or open UPI app. Amount: <strong id="fam-pay-amount" style="color:var(--neon-cyan);">₹0</strong></p>
+        <p style="color:var(--text-muted); font-size:13px; margin-bottom:8px;">Scan QR or open UPI app</p>
+        <p style="margin-bottom:12px; font-size:15px; color:#fff; font-weight:700;">Amount: <strong id="fam-pay-amount" style="color:#ff4d4d; font-size:20px;">₹0</strong></p>
+        <div style="background:rgba(255,184,0,0.12); border:1px solid rgba(255,184,0,0.45); border-radius:12px; padding:12px 14px; margin-bottom:14px; text-align:left;">
+            <p style="color:var(--warning); font-size:12px; font-weight:800; margin:0 0 6px 0; text-transform:uppercase; letter-spacing:.5px;"><i class="fas fa-exclamation-triangle"></i> IMPORTANT / जरूरी</p>
+            <p style="color:#fff; font-size:13px; margin:0 0 6px 0; line-height:1.45;">Payment karne ke baad <strong style="color:var(--success);">I Paid — Verify Now</strong> button pe click karein.</p>
+            <p style="color:var(--text-muted); font-size:12px; margin:0; line-height:1.4;">After payment, click <strong style="color:var(--success);">I Paid — Verify Now</strong> to confirm.</p>
+        </div>
         <div style="background:#fff; border-radius:16px; padding:12px; display:inline-block; margin-bottom:14px;">
             <img id="fam-pay-qr" src="" alt="UPI QR" style="width:220px; height:220px; object-fit:contain; display:block;"/>
         </div>
@@ -3307,7 +3437,8 @@ html,body{
             document.getElementById(`page-${pageId}`).classList.remove('hidden');
             document.getElementById('dropdown-menu').classList.remove('active');
             document.querySelectorAll('.rx-side-item[data-page]').forEach(item => item.classList.toggle('active', item.dataset.page === pageId));
-            if(window.innerWidth <= 900) document.getElementById('rx-sidebar')?.classList.remove('mobile-open');
+            document.getElementById('rx-sidebar')?.classList.remove('mobile-open');
+            document.getElementById('rx-sidebar-overlay')?.classList.remove('active');
             
             if(pageId === 'home') document.getElementById('search-input').value = ''; 
             if(pageId === 'history' || pageId === 'purchase-history') fetchPurchases();
@@ -3320,11 +3451,46 @@ html,body{
             window.scrollTo(0,0);
         };
 
+        function setRxSidebarOpen(open) {
+            const sidebar = document.getElementById('rx-sidebar');
+            const overlay = document.getElementById('rx-sidebar-overlay');
+            if (!sidebar) return;
+            if (open) {
+                sidebar.classList.add('mobile-open');
+                overlay?.classList.add('active');
+            } else {
+                sidebar.classList.remove('mobile-open');
+                overlay?.classList.remove('active');
+            }
+            document.getElementById('dropdown-menu')?.classList.remove('active');
+        }
         document.getElementById('menu-toggle').onclick = () => {
-            if(window.innerWidth <= 900) document.getElementById('rx-sidebar')?.classList.toggle('mobile-open');
-            else document.getElementById('dropdown-menu').classList.toggle('active');
+            const sidebar = document.getElementById('rx-sidebar');
+            if (!sidebar) return;
+            setRxSidebarOpen(!sidebar.classList.contains('mobile-open'));
         };
+        document.getElementById('rx-side-close')?.addEventListener('click', () => setRxSidebarOpen(false));
+        document.getElementById('rx-sidebar-overlay')?.addEventListener('click', () => setRxSidebarOpen(false));
         document.getElementById('side-logout').onclick = () => document.getElementById('btn-logout')?.click();
+
+        // Deposit amount quick chips
+        (function(){
+            const chips = document.getElementById('rx-amt-chips');
+            const amtInput = document.getElementById('add-amount');
+            if(!chips || !amtInput) return;
+            chips.addEventListener('click', (e) => {
+                const btn = e.target.closest('.rx-amt-chip');
+                if(!btn) return;
+                const v = btn.getAttribute('data-amt');
+                amtInput.value = v;
+                chips.querySelectorAll('.rx-amt-chip').forEach(c => c.classList.toggle('active', c === btn));
+            });
+            amtInput.addEventListener('input', () => {
+                const v = String(amtInput.value || '');
+                chips.querySelectorAll('.rx-amt-chip').forEach(c => c.classList.toggle('active', c.getAttribute('data-amt') === v));
+            });
+        })();
+
 
         function syncRxSidebarUser(){
             const name = (window.userData && (userData.name || userData.username || userData.email)) || 'Account';
