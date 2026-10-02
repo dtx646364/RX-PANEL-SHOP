@@ -3165,8 +3165,15 @@ html,body{
         // --- DASHBOARD: TOP SELLERS & TOP PRICING ---
         async function fetchTopSellers() {
             try {
-                const usersSnap = await get(ref(db, 'users'));
-                const purchasesSnap = await get(ref(db, 'purchases'));
+                const [usersSnap, purchasesSnap, siteSnap] = await Promise.all([
+                    get(ref(db, 'users')),
+                    get(ref(db, 'purchases')),
+                    get(ref(db, 'settings/site'))
+                ]);
+                
+                const resetAt = (siteSnap.exists() && siteSnap.val().leaderboard_reset_at)
+                    ? new Date(siteSnap.val().leaderboard_reset_at).getTime()
+                    : 0;
                 
                 let sellers = [];
                 if (usersSnap.exists() && purchasesSnap.exists()) {
@@ -3180,10 +3187,15 @@ html,body{
                         let spent = 0;
                         
                         for (let pid in userPurchases) {
-                            if (userPurchases[pid].status !== 'refunded') {
-                                keysCount++;
-                                spent += parseFloat(userPurchases[pid].price || 0);
+                            const p = userPurchases[pid];
+                            if (p.status === 'refunded') continue;
+                            // Only count purchases after leaderboard reset
+                            if (resetAt > 0) {
+                                const pTime = p.date ? new Date(p.date).getTime() : (p.timestamp ? new Date(p.timestamp).getTime() : 0);
+                                if (!pTime || pTime < resetAt) continue;
                             }
+                            keysCount++;
+                            spent += parseFloat(p.price || 0);
                         }
                         
                         if (keysCount > 0) {
