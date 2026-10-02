@@ -1268,6 +1268,23 @@ html,body{
 <canvas id="star-bg" aria-hidden="true"></canvas>
 <!-- TOAST CONTAINER -->
 <div id="toast-container"></div>
+
+<!-- WEBSITE MAINTENANCE SCREEN -->
+<div id="maintenance-screen" class="hidden" style="position:fixed;inset:0;z-index:99999;background:radial-gradient(circle at 50% 20%, rgba(255,184,0,0.08), transparent 45%), linear-gradient(160deg,#0a0805 0%,#120e08 50%,#08060a 100%);display:flex;align-items:center;justify-content:center;padding:24px;">
+    <div style="max-width:440px;width:100%;text-align:center;background:rgba(15,12,8,0.85);border:1px solid rgba(255,184,0,0.35);border-radius:24px;padding:40px 28px;box-shadow:0 0 50px rgba(255,184,0,0.12);">
+        <div style="width:88px;height:88px;margin:0 auto 22px;border-radius:50%;background:rgba(255,184,0,0.12);border:2px solid rgba(255,184,0,0.45);display:flex;align-items:center;justify-content:center;">
+            <i class="fas fa-tools" style="font-size:36px;color:#ffb800;filter:drop-shadow(0 0 12px rgba(255,184,0,0.5));"></i>
+        </div>
+        <h1 style="color:#fff;font-size:26px;font-weight:800;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">Under Maintenance</h1>
+        <p style="color:#ffb800;font-size:15px;font-weight:700;margin-bottom:12px;">Website temporarily closed</p>
+        <p style="color:#a0a5b5;font-size:14px;line-height:1.65;margin-bottom:28px;">Hum site improve kar rahe hain. Kripya thodi der baad try karein. Urgent help ke liye admin se contact karein.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;">
+            <a id="maint-wa-link" href="#" target="_blank" class="btn btn-outline btn-wa" style="width:auto;min-width:140px;text-decoration:none;"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+            <a id="maint-tg-link" href="#" target="_blank" class="btn btn-outline btn-tg" style="width:auto;min-width:140px;text-decoration:none;"><i class="fab fa-telegram-plane"></i> Telegram</a>
+        </div>
+    </div>
+</div>
+
 <!-- AUTHENTICATION SCREEN -->
 <div id="auth-screen">
     <!-- LOGIN FORM -->
@@ -1276,7 +1293,7 @@ html,body{
         <h1>RX<span>PANEL SHOP</span></h1>
         <p>Welcome back! Login to continue.</p>
         <div class="input-group">
-            <input id="login-email" placeholder="Email Address" type="email">
+            <input id="login-email" placeholder="Username" type="text" autocomplete="username">
         </div>
         <div class="input-group">
             <input id="login-pass" placeholder="Password" type="password">
@@ -1295,13 +1312,10 @@ html,body{
         <h1>RX<span>PANEL SHOP</span></h1>
         <p> </p>
         <div class="input-group">
-            <input id="signup-email" placeholder="Email Address" type="email">
+            <input id="signup-email" placeholder="Username" type="text" autocomplete="username">
         </div>
         <div class="input-group">
             <input id="signup-pass" placeholder="Password (Min 6 chars)" type="password">
-        </div>
-        <div class="input-group">
-            <input id="signup-referral" placeholder="Referral Code (Optional)" type="text">
         </div>
         <button class="btn btn-primary" id="btn-signup"><i class="fas fa-user-plus"></i> Sign Up</button>
         <p class="auth-toggle">Already registered? <span id="go-to-login">Login here</span></p>
@@ -1592,11 +1606,34 @@ html,body{
         </div>
 
         <!-- WALLET TABS -->
-        <div class="wallet-tabs">
+        <div class="wallet-tabs" id="wallet-tabs-bar">
             <div class="wallet-tab active" onclick="switchWalletTab('auto')" id="tab-btn-auto"><i class="fas fa-bolt"></i> Instant UPI</div>
             <div class="wallet-tab crypto-tab" onclick="switchWalletTab('crypto')" id="tab-btn-crypto"><i class="fab fa-bitcoin"></i> Binance / USDT</div>
             
             <div class="wallet-tab support-tab" onclick="switchWalletTab('support')" id="tab-btn-support"><i class="fas fa-headset"></i> Admin Support</div>
+        </div>
+
+        <!-- DEPOSIT LOCKED OVERLAY -->
+        <div id="deposit-lock-overlay" class="hidden" style="margin-top:10px;">
+            <div class="premium-card" style="text-align:center; border:1px solid rgba(255,42,95,0.35); background: linear-gradient(145deg, rgba(25,8,12,0.95), rgba(12,6,10,0.98)); box-shadow: 0 0 40px rgba(255,42,95,0.15);">
+                <div style="width:90px;height:90px;margin:0 auto 22px;border-radius:50%;background:rgba(255,42,95,0.12);border:2px solid rgba(255,42,95,0.4);display:flex;align-items:center;justify-content:center;">
+                    <i class="fas fa-lock" style="font-size:40px;color:#ff2a5f;filter:drop-shadow(0 0 12px rgba(255,42,95,0.6));"></i>
+                </div>
+                <h3 style="color:#fff;font-size:26px;font-weight:800;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;">
+                    Deposit <span style="color:#ff2a5f;">Locked</span>
+                </h3>
+                <p style="color:var(--warning);font-size:16px;font-weight:700;margin-bottom:10px;letter-spacing:0.5px;">
+                    All Balance / Deposits — Contact Admin
+                </p>
+                <p style="color:var(--text-muted);font-size:14px;line-height:1.6;max-width:420px;margin:0 auto 28px;">
+                    Abhi deposit system temporarily band hai. Balance add karne ya kisi bhi deposit issue ke liye please Admin se contact karein.
+                </p>
+                <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;">
+                    <button type="button" class="btn" style="width:auto;min-width:160px;border-color:var(--wa-color);color:var(--wa-color);" onclick="switchWalletTab('support')">
+                        <i class="fas fa-headset"></i> Contact Admin
+                    </button>
+                </div>
+            </div>
         </div>
 
         <!-- TAB CONTENT: AUTO DEPOSIT (ZAPUPI) -->
@@ -2181,11 +2218,29 @@ html,body{
 
         // --- WALLET TABS LOGIC ---
         window.switchWalletTab = (tab) => {
+            // Block deposit tabs when locked (support always allowed)
+            if (window.__depositLocked && (tab === 'auto' || tab === 'crypto' || tab === 'manual')) {
+                const overlay = document.getElementById('deposit-lock-overlay');
+                if (overlay) overlay.classList.remove('hidden');
+                document.querySelectorAll('.wallet-section').forEach(s => s.classList.add('hidden'));
+                showToast("Deposit locked — Contact Admin", "warning");
+                return;
+            }
             document.querySelectorAll('.wallet-tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.wallet-section').forEach(s => s.classList.add('hidden'));
-            document.getElementById(`tab-btn-${tab}`).classList.add('active');
+            const overlay = document.getElementById('deposit-lock-overlay');
+            if (overlay && tab !== 'support') {
+                // when unlocked, hide overlay
+                if (!window.__depositLocked) overlay.classList.add('hidden');
+            }
+            if (tab === 'support' && window.__depositLocked && overlay) {
+                overlay.classList.add('hidden'); // show support content instead
+            }
+            const btn = document.getElementById(`tab-btn-${tab}`);
+            if (btn) btn.classList.add('active');
             if(tab === 'history') return navigate('history');
-            document.getElementById(`wallet-tab-${tab}`).classList.remove('hidden');
+            const section = document.getElementById(`wallet-tab-${tab}`);
+            if (section) section.classList.remove('hidden');
         };
 
         // --- AUTO PAYMENT VERIFICATION SYSTEM ---
@@ -2501,6 +2556,7 @@ html,body{
         };
 
         document.getElementById('btn-submit-payment').onclick = async () => {
+            if (window.__depositLocked) return showToast("Deposit locked — Contact Admin", "warning");
             const amtStr = document.getElementById('add-amount').value;
             const amt = parseFloat(amtStr);
             const phone = document.getElementById('add-phone').value.trim();
@@ -2700,6 +2756,7 @@ html,body{
         };
 
         document.getElementById('btn-submit-manual').onclick = async () => {
+            if (window.__depositLocked) return showToast("Deposit locked — Contact Admin", "warning");
             const amtStr = document.getElementById('manual-amount').value;
             const amt = parseFloat(amtStr);
             const utr = document.getElementById('manual-utr').value.trim();
@@ -2733,6 +2790,7 @@ html,body{
         };
 
         window.submitCryptoDeposit = async () => {
+            if (window.__depositLocked) return showToast("Deposit locked — Contact Admin", "warning");
             const amtStr = document.getElementById('crypto-amount').value;
             const amt = parseFloat(amtStr);
             const hash = document.getElementById('crypto-hash').value.trim();
@@ -2782,6 +2840,10 @@ html,body{
                     globalBtn.href = tgDash; globalBtn.style.display = tgDash === '#' ? 'none' : 'flex';
                     document.getElementById('support-wa-btn').href = waLink;
                     document.getElementById('support-tg-btn').href = tgDash !== '#' ? tgDash : tgLogin;
+                    const mWa = document.getElementById('maint-wa-link');
+                    const mTg = document.getElementById('maint-tg-link');
+                    if (mWa) mWa.href = waLink;
+                    if (mTg) mTg.href = tgLogin !== '#' ? tgLogin : tgDash;
                 }
             });
         }
@@ -2796,6 +2858,31 @@ html,body{
             });
         }
         initBranding();
+
+        // Website Maintenance Mode
+        window.__maintenanceMode = false;
+        function applyMaintenanceMode(on) {
+            window.__maintenanceMode = !!on;
+            const screen = document.getElementById('maintenance-screen');
+            const authEl = document.getElementById('auth-screen');
+            const appEl = document.getElementById('main-app');
+            if (!screen) return;
+            if (on) {
+                screen.classList.remove('hidden');
+                screen.style.display = 'flex';
+                if (authEl) authEl.style.visibility = 'hidden';
+                if (appEl) appEl.style.visibility = 'hidden';
+            } else {
+                screen.classList.add('hidden');
+                screen.style.display = 'none';
+                if (authEl) authEl.style.visibility = '';
+                if (appEl) appEl.style.visibility = '';
+            }
+        }
+        onValue(ref(db, 'settings/site'), (snap) => {
+            const data = snap.val() || {};
+            applyMaintenanceMode(data.maintenance_mode === true || data.maintenance_mode === 'true');
+        });
 
         function fetchDepositSettings() {
             onValue(ref(db, 'settings/payment'), (snap) => {
@@ -2822,8 +2909,55 @@ html,body{
                     const cryptoQrDl = document.getElementById('crypto-qr-download');
                     if(data.crypto_qr) { cryptoQrImg.src = data.crypto_qr; cryptoQrImg.style.display = 'block'; cryptoQrDl.href = data.crypto_qr; cryptoQrDl.style.display = 'inline-flex'; } 
                     else { cryptoQrImg.style.display = 'none'; cryptoQrDl.style.display = 'none'; }
+                    // Apply deposit lock
+                    applyDepositLock(data.deposit_locked === true || data.deposit_locked === 'true');
+                } else {
+                    applyDepositLock(false);
                 }
             });
+        }
+
+        window.__depositLocked = false;
+        function applyDepositLock(locked) {
+            window.__depositLocked = !!locked;
+            const overlay = document.getElementById('deposit-lock-overlay');
+            const tabsBar = document.getElementById('wallet-tabs-bar');
+            const sections = ['wallet-tab-auto', 'wallet-tab-crypto', 'wallet-tab-manual'];
+            if (!overlay) return;
+            if (locked) {
+                overlay.classList.remove('hidden');
+                sections.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.classList.add('hidden');
+                });
+                // Keep support accessible
+                if (tabsBar) {
+                    const autoBtn = document.getElementById('tab-btn-auto');
+                    const cryptoBtn = document.getElementById('tab-btn-crypto');
+                    if (autoBtn) { autoBtn.style.opacity = '0.4'; autoBtn.style.pointerEvents = 'none'; }
+                    if (cryptoBtn) { cryptoBtn.style.opacity = '0.4'; cryptoBtn.style.pointerEvents = 'none'; }
+                }
+            } else {
+                overlay.classList.add('hidden');
+                if (tabsBar) {
+                    const autoBtn = document.getElementById('tab-btn-auto');
+                    const cryptoBtn = document.getElementById('tab-btn-crypto');
+                    if (autoBtn) { autoBtn.style.opacity = ''; autoBtn.style.pointerEvents = ''; }
+                    if (cryptoBtn) { cryptoBtn.style.opacity = ''; cryptoBtn.style.pointerEvents = ''; }
+                }
+                // Restore active tab content
+                const activeTab = document.querySelector('.wallet-tab.active');
+                if (activeTab && activeTab.id === 'tab-btn-auto') {
+                    const el = document.getElementById('wallet-tab-auto');
+                    if (el) el.classList.remove('hidden');
+                } else if (activeTab && activeTab.id === 'tab-btn-crypto') {
+                    const el = document.getElementById('wallet-tab-crypto');
+                    if (el) el.classList.remove('hidden');
+                } else {
+                    const el = document.getElementById('wallet-tab-auto');
+                    if (el) el.classList.remove('hidden');
+                }
+            }
         }
 
         let autoScrollInterval;
@@ -2925,78 +3059,102 @@ html,body{
             }
         });
 
-        // 🌟 SIGNUP & REFERRAL LOGIC
+        // Username helpers (Firebase Auth needs email format internally)
+        const RX_AUTH_DOMAIN = '@rxpanel.local';
+        function normalizeUsername(u) {
+            return (u || '').trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
+        }
+        function usernameToAuthEmail(username) {
+            const u = normalizeUsername(username);
+            return u + RX_AUTH_DOMAIN;
+        }
+        function displayNameFromUser(user) {
+            if (!user) return 'User';
+            if (user.username) return user.username;
+            if (user.name && !String(user.name).includes('@')) return user.name;
+            if (user.email) {
+                const e = String(user.email);
+                if (e.endsWith(RX_AUTH_DOMAIN)) return e.replace(RX_AUTH_DOMAIN, '');
+                return e.split('@')[0];
+            }
+            return 'User';
+        }
+
+        // 🌟 SIGNUP (Username based — no referral on form)
         document.getElementById('btn-signup').onclick = async () => {
-            const email = document.getElementById('signup-email').value.trim();
+            const rawUser = document.getElementById('signup-email').value.trim();
+            const username = normalizeUsername(rawUser);
             const pass = document.getElementById('signup-pass').value;
-            const referralCode = document.getElementById('signup-referral').value.trim().toUpperCase();
             const btn = document.getElementById('btn-signup');
 
-            if(!email || pass.length < 6) return showToast("Invalid email or password (<6 chars)", "error");
+            if (!username || username.length < 3) return showToast("Username min 3 characters (a-z, 0-9, _)", "error");
+            if (pass.length < 6) return showToast("Password must be at least 6 characters", "error");
             btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Loading...`; btn.disabled = true; showLoader();
             
             try {
-                let parentUid = null;
-                if (referralCode) {
-                    const refSnap = await get(ref(db, `referral_codes/${referralCode}`));
-                    if (!refSnap.exists()) {
-                        throw new Error("Invalid Referral Code!");
-                    }
-                    parentUid = refSnap.val();
-                }
+                const unameSnap = await get(ref(db, `usernames/${username}`));
+                if (unameSnap.exists()) throw new Error("Username already taken!");
 
-                const cred = await createUserWithEmailAndPassword(auth, email, pass);
+                const authEmail = usernameToAuthEmail(username);
+                const cred = await createUserWithEmailAndPassword(auth, authEmail, pass);
                 const myReferralCode = "REF-" + Math.random().toString(36).substring(2,8).toUpperCase();
                 
                 await set(ref(db, `users/${cred.user.uid}`), { 
-                    email: email, 
+                    email: authEmail,
+                    username: username,
                     balance: 0, 
                     createdAt: serverTimestamp(), 
                     status: 'active', 
                     role: 'user',
-                    name: email.split('@')[0],
+                    name: username,
                     referralCode: myReferralCode,
-                    parentResellerUid: parentUid || null,
-                    sponsorUid: parentUid || null,
-                    createdBy: parentUid || 'self',
-                    joinedByReferral: !!parentUid
+                    parentResellerUid: null,
+                    sponsorUid: null,
+                    createdBy: 'self',
+                    joinedByReferral: false
                 });
+                await set(ref(db, `usernames/${username}`), cred.user.uid);
                 await set(ref(db, `referral_codes/${myReferralCode}`), cred.user.uid);
-
-                if (parentUid) {
-                    await set(ref(db, `referrals/${parentUid}/${cred.user.uid}`), {
-                        email: email,
-                        joinDate: new Date().toISOString(),
-                        status: 'active',
-                        role: 'user',
-                        purchases: 0,
-                        earningsGenerated: 0
-                    });
-                    await push(ref(db, `notifications/${parentUid}`), {
-                        title: "New Referral Joined!",
-                        message: `${email} joined using your code.`,
-                        type: "promo",
-                        date: new Date().toISOString()
-                    });
-                }
 
                 showToast("Account Created Successfully!");
             } catch (error) { 
-                showToast(error.message, "error"); 
+                let msg = error.message || "Signup failed";
+                if (msg.includes('email-already-in-use')) msg = "Username already taken!";
+                showToast(msg, "error"); 
             } 
             finally { btn.innerHTML = `<i class="fas fa-user-plus"></i> Sign Up`; btn.disabled = false; hideLoader(); }
         };
 
         document.getElementById('btn-login').onclick = async () => {
-            const email = document.getElementById('login-email').value.trim();
+            const raw = document.getElementById('login-email').value.trim();
             const pass = document.getElementById('login-pass').value;
             const btn = document.getElementById('btn-login');
 
-            if(!email || !pass) return showToast("Enter email and password", "error");
+            if(!raw || !pass) return showToast("Enter username and password", "error");
             btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Loading...`; btn.disabled = true; showLoader();
 
-            try { await signInWithEmailAndPassword(auth, email, pass); showToast("Welcome back!"); } 
-            catch (error) { showToast("Invalid Credentials", "error"); } 
+            try {
+                // Support: plain username OR legacy full email
+                let authEmail = raw;
+                if (!raw.includes('@')) {
+                    const username = normalizeUsername(raw);
+                    // Prefer mapped email if exists (legacy users)
+                    const unameSnap = await get(ref(db, `usernames/${username}`));
+                    if (unameSnap.exists()) {
+                        const uid = unameSnap.val();
+                        const userSnap = await get(ref(db, `users/${uid}`));
+                        if (userSnap.exists() && userSnap.val().email) {
+                            authEmail = userSnap.val().email;
+                        } else {
+                            authEmail = usernameToAuthEmail(username);
+                        }
+                    } else {
+                        authEmail = usernameToAuthEmail(username);
+                    }
+                }
+                await signInWithEmailAndPassword(auth, authEmail, pass);
+                showToast("Welcome back!");
+            } catch (error) { showToast("Invalid Username or Password", "error"); } 
             finally { btn.innerHTML = `<i class="fas fa-sign-in-alt"></i> Secure Login`; btn.disabled = false; hideLoader(); }
         };
 
@@ -3030,7 +3188,7 @@ html,body{
                         
                         if (keysCount > 0) {
                             sellers.push({
-                                email: user.email || 'Hidden',
+                                username: displayNameFromUser(user),
                                 keys: keysCount,
                                 spent: spent,
                                 role: user.role || 'user'
@@ -3050,12 +3208,12 @@ html,body{
                     sellers.slice(0, 10).forEach((s, index) => {
                         let rankClass = index === 0 ? 'rank-1' : (index === 1 ? 'rank-2' : (index === 2 ? 'rank-3' : ''));
                         let roleBadge = (s.role === 'reseller' || s.role === 'admin') ? `<span style="color:var(--neon-cyan);"><i class="fas fa-user-tie"></i> Reseller</span>` : `<span style="color:var(--text-muted);"><i class="fas fa-user"></i> User</span>`;
-                        let emailMasked = s.email.replace(/(.{2})(.*)(?=@)/, (gp1, gp2, gp3) => gp2 + gp3.replace(/./g, '*'));
+                        const displayUser = s.username || 'User';
 
                         tbody.innerHTML += `
                             <tr>
                                 <td><span class="rank-badge ${rankClass}">#${index + 1}</span></td>
-                                <td>${emailMasked}</td>
+                                <td style="font-weight:600;">${displayUser}</td>
                                 <td>${s.keys}</td>
                                 <td style="color:var(--success); font-weight:bold;"> $ ${s.spent.toFixed(2)}</td>
                                 <td>${roleBadge}</td>
@@ -3070,12 +3228,12 @@ html,body{
                 let roleBadge = window.isReseller ? `<span style="color:var(--neon-cyan);"><i class="fas fa-user-tie"></i> Reseller</span>` : `<span style="color:var(--text-muted);"><i class="fas fa-user"></i> User</span>`;
                 let spent = document.getElementById('prof-spent').innerText;
                 let keys = document.getElementById('prof-purchases').innerText;
-                let emailMasked = userData.email ? userData.email.replace(/(.{2})(.*)(?=@)/, (gp1, gp2, gp3) => gp2 + gp3.replace(/./g, '*')) : 'User';
+                let displayUser = displayNameFromUser(userData);
                 
                 document.getElementById('dash-top-sellers').innerHTML = `
                     <tr>
                         <td><span class="rank-badge rank-1">#1</span></td>
-                        <td>${emailMasked}</td>
+                        <td style="font-weight:600;">${displayUser}</td>
                         <td>${keys}</td>
                         <td style="color:var(--success); font-weight:bold;"> $ ${spent}</td>
                         <td>${roleBadge}</td>
