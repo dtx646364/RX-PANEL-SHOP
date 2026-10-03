@@ -607,6 +607,24 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;ba
 .marquee-container span{color:var(--rx-yellow)!important}
 @media(max-width:768px){.navbar{width:calc(100% - 18px)!important;top:9px!important}.page-content{padding-left:14px!important;padding-right:14px!important}.page-title{font-size:25px!important}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* How to Buy navbar button — always visible */
+.how-to-buy-btn{
+  display:inline-flex !important;align-items:center;justify-content:center;gap:6px;
+  height:40px;padding:0 14px;border-radius:12px;text-decoration:none;
+  background:linear-gradient(145deg,rgba(255,210,26,.18),rgba(255,210,26,.06));
+  border:1px solid rgba(255,210,26,.55);color:#ffd21a;font-weight:800;font-size:12px;
+  letter-spacing:.3px;white-space:nowrap;transition:.25s ease;
+  box-shadow:0 0 16px rgba(255,210,26,.18);
+  flex-shrink:0;
+}
+.how-to-buy-btn i{font-size:15px}
+.how-to-buy-btn:hover{background:rgba(255,210,26,.28);color:#fff;border-color:#ffd21a;transform:translateY(-1px);box-shadow:0 0 22px rgba(255,210,26,.35)}
+@media(max-width:520px){
+  .how-to-buy-btn{padding:0 10px;height:38px;min-width:38px}
+  .how-to-buy-btn .htb-label{display:none}
+  .how-to-buy-btn i{font-size:18px}
+}
 </style>
 
 
@@ -1348,7 +1366,7 @@ html,body{
                     <div class="rx-side-user-name" id="rx-side-name">Account</div>
                     <span class="rx-side-role" id="rx-side-role">User</span>
                 </div>
-                <div class="rx-side-balance"><small>Balance</small><strong> $ <span id="rx-side-balance">0.00</span></strong></div>
+                <div class="rx-side-balance"><small>Balance</small><strong> ₹ <span id="rx-side-balance">0.00</span></strong></div>
             </div>
             <div class="rx-side-status">
                 
@@ -1361,16 +1379,16 @@ html,body{
         <div class="rx-side-nav">
             <div class="rx-side-item" data-page="dashboard" onclick="navigate('dashboard')"><i class="fas fa-house"></i><span>Dashboard</span><i class="fas fa-chevron-right rx-side-arrow"></i></div>
             <div class="rx-side-item" data-page="home" onclick="navigate('home')"><i class="fas fa-key"></i><span>Buy Keys</span><i class="fas fa-chevron-right rx-side-arrow"></i></div>
+            <a class="rx-side-item" id="side-how-to-buy" href="#" target="_blank" rel="noopener" style="text-decoration:none;"><i class="fas fa-play-circle"></i><span>How to Buy</span><i class="fas fa-external-link-alt rx-side-arrow"></i></a>
             <div class="rx-side-item" data-page="wallet" onclick="navigate('wallet')"><i class="fas fa-wallet"></i><span>deposit</span><i class="fas fa-chevron-right rx-side-arrow"></i></div>
             <div class="rx-side-item" data-page="purchase-history" onclick="navigate('purchase-history')"><i class="fas fa-receipt"></i><span>Purchase History</span><i class="fas fa-chevron-right rx-side-arrow"></i></div>
             <div class="rx-side-item" data-page="history" onclick="navigate('history')"><i class="fas fa-key"></i><span>History</span><i class="fas fa-chevron-right rx-side-arrow"></i></div>
         </div>
         <div class="rx-side-section">Account</div>
         <div class="rx-side-nav">
-            <div class="rx-side-item" data-page="referrals" onclick="navigate('referrals')"><i class="fas fa-users"></i><span>My Referrals</span><i class="fas fa-chevron-right rx-side-arrow"></i></div>
             <div class="rx-side-item" data-page="commissions" onclick="navigate('commissions')"><i class="fas fa-money-bill-wave"></i><span>Commissions</span><i class="fas fa-chevron-right rx-side-arrow"></i></div>
             <div class="rx-side-item" data-page="notifications" onclick="navigate('notifications')"><i class="fas fa-bell"></i><span>Notifications</span><i class="fas fa-chevron-right rx-side-arrow"></i></div>
-            <div class="rx-side-item" data-page="profile" onclick="navigate('profile')"><i class="fas fa-user"></i><span>Profile</span><i class="fas fa-chevron-right rx-side-arrow"></i></div>
+            <div class="rx-side-item" data-page="profile" onclick="navigate('profile')"><i class="fas fa-cog"></i><span>Settings</span><i class="fas fa-chevron-right rx-side-arrow"></i></div>
             <div class="rx-side-item hidden" id="side-reseller" data-page="reseller" onclick="navigate('reseller')"><i class="fas fa-briefcase"></i><span>Reseller Dashboard</span><i class="fas fa-chevron-right rx-side-arrow"></i></div>
         </div>
         <div class="rx-side-bottom">
@@ -1387,8 +1405,11 @@ html,body{
         <div class="nav-right">
             <!-- Dynamic Reseller Badge -->
             <div class="balance-badge reseller-nav-badge" id="navbar-reseller-badge"><i class="fas fa-user-tie"></i> Reseller</div>
+            <a href="#" id="nav-how-to-buy" target="_blank" rel="noopener" class="how-to-buy-btn" title="How to Buy">
+                <i class="fas fa-play-circle"></i> <span class="htb-label">How to Buy</span>
+            </a>
             <button class="menu-btn" id="menu-toggle" aria-label="Toggle sidebar"><i class="fas fa-bars"></i></button>
-            <div class="balance-badge"><i class="fas fa-wallet"></i>  $ <span id="nav-balance">0.00</span></div>
+            <div class="balance-badge"><i class="fas fa-wallet"></i>  ₹ <span id="nav-balance">0.00</span></div>
         </div>
         <!-- DROPDOWN MENU -->
         <div class="dropdown glass" id="dropdown-menu">
@@ -1398,10 +1419,9 @@ html,body{
             <div class="dropdown-item" onclick="navigate('purchase-history')"><i class="fas fa-receipt"></i> Purchase History</div>
             <div class="dropdown-item" onclick="navigate('history')"><i class="fas fa-key"></i> My Keys</div>
             <div class="dropdown-item hidden" id="menu-reseller" onclick="navigate('reseller')"><i class="fas fa-briefcase"></i> Reseller Dashboard</div>
-            <div class="dropdown-item" onclick="navigate('referrals')"><i class="fas fa-users"></i> My Referrals</div>
             <div class="dropdown-item" onclick="navigate('commissions')"><i class="fas fa-money-bill-wave"></i> Commissions</div>
             <div class="dropdown-item" onclick="navigate('notifications')"><i class="fas fa-bell"></i> Notifications</div>
-            <div class="dropdown-item" onclick="navigate('profile')"><i class="fas fa-user-astronaut"></i> Profile</div>
+            <div class="dropdown-item" onclick="navigate('profile')"><i class="fas fa-cog"></i> Settings</div>
             <div class="dropdown-item" id="btn-logout" style="color: var(--error); border-top: 1px solid rgba(255,255,255,0.1);"><i class="fas fa-sign-out-alt"></i> Logout</div>
         </div>
     </nav>
@@ -1426,12 +1446,12 @@ html,body{
             </div>
             <div class="dash-card purple">
                 <div class="dash-icon" style="background: rgba(188,19,254,0.1); color: var(--neon-purple);"><i class="fas fa-chart-line"></i></div>
-                <div class="dash-val" id="dash-stat-spent">$0.00</div>
+                <div class="dash-val" id="dash-stat-spent">₹0.00</div>
                 <div class="dash-label">Total Spent</div>
             </div>
             <div class="dash-card success">
                 <div class="dash-icon" style="background: rgba(0,255,102,0.1); color: var(--success);"><i class="fas fa-wallet"></i></div>
-                <div class="dash-val" id="dash-stat-bal">$0.00</div>
+                <div class="dash-val" id="dash-stat-bal">₹0.00</div>
                 <div class="dash-label">Wallet Balance</div>
             </div>
             <div class="dash-card warning">
@@ -1454,7 +1474,7 @@ html,body{
                 <i class="fas fa-wallet"></i> Wallet
             </div>
             <div class="action-btn c4" onclick="navigate('profile')">
-                <i class="fas fa-user"></i> Profile
+                <i class="fas fa-cog"></i> Settings
             </div>
         </div>
 
@@ -1512,7 +1532,7 @@ html,body{
                 <div class="sp-store-icon"><i class="fas fa-store"></i></div>
                 <div>
                     <div class="sp-store-title">Store</div>
-                    <div class="sp-store-sub">Catalog priced in USD</div>
+                    <div class="sp-store-sub">Catalog priced in INR</div>
                 </div>
             </div>
             <div class="sp-products"><span id="sp-product-count">0</span><small>PRODUCTS</small></div>
@@ -1579,28 +1599,28 @@ html,body{
                 <div class="wallet-stat-icon" style="background: rgba(0, 240, 255, 0.1); color: var(--neon-cyan);"><i class="fas fa-wallet"></i></div>
                 <div class="wallet-stat-info">
                     <h4>Current Balance</h4>
-                    <h2 id="wallet-stat-bal">$0.00</h2>
+                    <h2 id="wallet-stat-bal">₹0.00</h2>
                 </div>
             </div>
             <div class="wallet-stat-card today-card">
                 <div class="wallet-stat-icon" style="background: rgba(0, 255, 102, 0.1); color: var(--success);"><i class="fas fa-calendar-day"></i></div>
                 <div class="wallet-stat-info">
                     <h4>Today Deposit</h4>
-                    <h2 id="wallet-stat-today">$0.00</h2>
+                    <h2 id="wallet-stat-today">₹0.00</h2>
                 </div>
             </div>
             <div class="wallet-stat-card total-card">
                 <div class="wallet-stat-icon" style="background: rgba(188, 19, 254, 0.1); color: var(--neon-purple);"><i class="fas fa-arrow-down"></i></div>
                 <div class="wallet-stat-info">
                     <h4>Total Deposit</h4>
-                    <h2 id="wallet-stat-dep">$0.00</h2>
+                    <h2 id="wallet-stat-dep">₹0.00</h2>
                 </div>
             </div>
             <div class="wallet-stat-card pending-card">
                 <div class="wallet-stat-icon" style="background: rgba(255, 184, 0, 0.1); color: var(--warning);"><i class="fas fa-clock"></i></div>
                 <div class="wallet-stat-info">
                     <h4>Pending Deposit</h4>
-                    <h2 id="wallet-stat-pending">$0.00</h2>
+                    <h2 id="wallet-stat-pending">₹0.00</h2>
                 </div>
             </div>
         </div>
@@ -1698,7 +1718,7 @@ html,body{
                     <i class="fab fa-bitcoin" style="color:var(--neon-crypto); font-size: 28px; filter: drop-shadow(0 0 10px var(--neon-crypto));"></i> Binance / USDT
                 </h3>
                 <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 25px; line-height: 1.6;">
-                    Scan the QR code or copy the address below to send USDT. Current Rate: <strong style="color:var(--neon-crypto); font-size: 16px;">1 USDT =  $ <span id="crypto-rate">88.00</span></strong>
+                    Scan the QR code or copy the address below to send USDT. Current Rate: <strong style="color:var(--neon-crypto); font-size: 16px;">1 USDT =  ₹ <span id="crypto-rate">88.00</span></strong>
                 </p>
                 
                 <div class="qr-box crypto-qr">
@@ -1756,7 +1776,7 @@ html,body{
                 </div>
 
                 <div class="input-group">
-                    <input id="manual-amount" class="premium-input" placeholder="Amount Sent ( $ )" required="" type="number">
+                    <input id="manual-amount" class="premium-input" placeholder="Amount Sent ( ₹ )" required="" type="number">
                 </div>
                 <div class="input-group">
                     <input id="manual-utr" class="premium-input" placeholder="12-Digit UTR / Ref No." required="" type="text">
@@ -1797,9 +1817,9 @@ html,body{
 
     </div>
 
-    <!-- PAGE: PROFILE -->
+    <!-- PAGE: SETTINGS (profile) -->
     <div class="page-content hidden" id="page-profile">
-        <div class="page-header"><h2 class="page-title">Account <span>Details</span></h2></div>
+        <div class="page-header"><h2 class="page-title">Account <span>Settings</span></h2></div>
         <div class="glass" style="padding: 10px 0; max-width: 600px; margin: 0 auto;">
             
             <div class="profile-stat" id="reseller-badge-container" style="display:none; background: rgba(0, 240, 255, 0.05);">
@@ -1837,7 +1857,7 @@ html,body{
             </div>
             <div class="profile-stat">
                 <span style="color: var(--text-muted);"><i class="fas fa-wallet"></i> Current Balance</span>
-                <strong style="color: var(--success); font-size: 16px;"> $  <span id="prof-bal">0.00</span></strong>
+                <strong style="color: var(--success); font-size: 16px;"> ₹  <span id="prof-bal">0.00</span></strong>
             </div>
             <div class="profile-stat">
                 <span style="color: var(--text-muted);"><i class="fas fa-shopping-cart"></i> Total Purchases</span>
@@ -1845,12 +1865,12 @@ html,body{
             </div>
             <div class="profile-stat">
                 <span style="color: var(--text-muted);"><i class="fas fa-chart-line"></i> Total Spent</span>
-                <strong style="color: var(--neon-purple); font-size: 16px;"> $  <span id="prof-spent">0.00</span></strong>
+                <strong style="color: var(--neon-purple); font-size: 16px;"> ₹  <span id="prof-spent">0.00</span></strong>
             </div>
 
             <div class="profile-stat" id="prof-profit-container" style="display:none;">
                 <span style="color: var(--text-muted);"><i class="fas fa-coins"></i> Total Profit (Saved)</span>
-                <strong style="color: var(--success); font-size: 16px;"> $  <span id="prof-profit">0.00</span></strong>
+                <strong style="color: var(--success); font-size: 16px;"> ₹  <span id="prof-profit">0.00</span></strong>
             </div>
 
             <div class="profile-stat">
@@ -1858,6 +1878,13 @@ html,body{
                 <strong id="prof-date">...</strong>
             </div>
             
+            <div class="profile-stat" style="align-items:center;">
+                <span style="color: var(--text-muted);"><i class="fas fa-volume-up" id="tap-sound-icon"></i> Tap Sound</span>
+                <button type="button" id="btn-toggle-tap-sound" class="btn-outline" style="padding: 6px 14px; font-size: 12px; height: 34px; min-width: 110px; border-radius: 10px;" onclick="window.toggleTapSoundMute()">
+                    <i class="fas fa-volume-up"></i> <span id="tap-sound-label">ON</span>
+                </button>
+            </div>
+
             <div style="padding: 20px;">
                 <button class="btn btn-outline" style="width:100%; border-color: rgba(255,255,255,0.2); color: white;" onclick="resetPassword()"><i class="fas fa-key"></i> Reset Password</button>
             </div>
@@ -1876,17 +1903,17 @@ html,body{
             </div>
             <div class="dash-card purple">
                 <div class="dash-icon" style="background: rgba(188,19,254,0.1); color: var(--neon-purple);"><i class="fas fa-shopping-cart"></i></div>
-                <div class="dash-val" id="reseller-total-sales">$0.00</div>
+                <div class="dash-val" id="reseller-total-sales">₹0.00</div>
                 <div class="dash-label">Total Sales</div>
             </div>
             <div class="dash-card success">
                 <div class="dash-icon" style="background: rgba(0,255,102,0.1); color: var(--success);"><i class="fas fa-money-bill-wave"></i></div>
-                <div class="dash-val" id="reseller-total-comm">$0.00</div>
+                <div class="dash-val" id="reseller-total-comm">₹0.00</div>
                 <div class="dash-label">Commission Earned</div>
             </div>
             <div class="dash-card warning">
                 <div class="dash-icon" style="background: rgba(255,184,0,0.1); color: var(--warning);"><i class="fas fa-wallet"></i></div>
-                <div class="dash-val" id="reseller-avail-bal">$0.00</div>
+                <div class="dash-val" id="reseller-avail-bal">₹0.00</div>
                 <div class="dash-label">Available Balance</div>
             </div>
         </div>
@@ -1947,7 +1974,7 @@ html,body{
             </div>
         </div>
         <div style="margin-bottom: 20px; font-size: 18px; color: var(--success); font-weight: bold; padding: 15px; background: rgba(0,255,102,0.1); border-radius: 12px; border: 1px solid rgba(0,255,102,0.2); display: inline-block;">
-            <i class="fas fa-coins"></i> Total Commission:  $ <span id="total-comm-counter">0.00</span>
+            <i class="fas fa-coins"></i> Total Commission:  ₹ <span id="total-comm-counter">0.00</span>
         </div>
         <div class="dash-table-wrapper">
             <table class="dash-table">
@@ -2001,7 +2028,7 @@ html,body{
 </div>
 
 <!-- RX BUY PRODUCT MODAL -->
-<div id="rx-buy-modal" class="rx-buy-overlay hidden"><div class="rx-buy-modal"><button type="button" class="rx-buy-close" onclick="window.closeRxBuyModal()" aria-label="Close"><i class="fas fa-times"></i></button><div class="rx-buy-top"><div class="rx-buy-info"><div id="rx-buy-cat" class="rx-buy-cat">PANEL</div><h3 id="rx-buy-name" class="rx-buy-name">PRODUCT</h3><div id="rx-buy-device" class="rx-buy-device">Non Root Device</div><div class="rx-buy-rating"><span>★★★★★</span> &nbsp;5.0 (1) Reviews &nbsp;›</div></div></div><div class="rx-buy-line"></div><div class="rx-buy-title"><span>Choose duration</span><small><i class="fas fa-bolt"></i> Instant key delivery</small></div><div id="rx-buy-plans" class="rx-buy-plans"></div><div class="rx-buy-summary"><span id="rx-buy-selected-label">1 DAY</span><strong>$ <span id="rx-buy-selected-price">0.00</span></strong></div><div class="rx-buy-actions"><button class="rx-buy-action rx-buy-now" onclick="window.buyRxPlan()"><i class="fas fa-wallet"></i> Buy now</button><button class="rx-buy-action rx-buy-cart" onclick="window.addRxPlanToCart()"><i class="fas fa-shopping-cart"></i> Add to cart</button></div></div></div>
+<div id="rx-buy-modal" class="rx-buy-overlay hidden"><div class="rx-buy-modal"><button type="button" class="rx-buy-close" onclick="window.closeRxBuyModal()" aria-label="Close"><i class="fas fa-times"></i></button><div class="rx-buy-top"><div class="rx-buy-info"><div id="rx-buy-cat" class="rx-buy-cat">PANEL</div><h3 id="rx-buy-name" class="rx-buy-name">PRODUCT</h3><div id="rx-buy-device" class="rx-buy-device">Non Root Device</div><div class="rx-buy-rating"><span>★★★★★</span> &nbsp;5.0 (1) Reviews &nbsp;›</div></div></div><div class="rx-buy-line"></div><div class="rx-buy-title"><span>Choose duration</span><small><i class="fas fa-bolt"></i> Instant key delivery</small></div><div id="rx-buy-plans" class="rx-buy-plans"></div><div class="rx-buy-summary"><span id="rx-buy-selected-label">1 DAY</span><strong>₹ <span id="rx-buy-selected-price">0.00</span></strong></div><div class="rx-buy-actions"><button class="rx-buy-action rx-buy-now" onclick="window.buyRxPlan()"><i class="fas fa-wallet"></i> Buy now</button><button class="rx-buy-action rx-buy-cart" onclick="window.addRxPlanToCart()"><i class="fas fa-shopping-cart"></i> Add to cart</button></div></div></div>
 
 <!-- CHECKOUT MODAL -->
 <div class="modal-overlay hidden" id="modal-checkout">
@@ -2019,14 +2046,14 @@ html,body{
             </div>
             <div class="checkout-row">
                 <span>Original Price:</span>
-                <strong> $ <span id="chk-orig-price">0.00</span></strong>
+                <strong> ₹ <span id="chk-orig-price">0.00</span></strong>
             </div>
             
             <div class="checkout-total">
                 <span>To Pay:</span>
                 <div>
-                    <span id="chk-strike-price" class="strike-price hidden">$0.00</span>
-                    <span> $ <span id="chk-final-price">0.00</span></span>
+                    <span id="chk-strike-price" class="strike-price hidden">₹0.00</span>
+                    <span> ₹ <span id="chk-final-price">0.00</span></span>
                 </div>
             </div>
         </div>
@@ -2355,11 +2382,11 @@ html,body{
                 console.log("[TRANSACTION SAVED] ID:", orderId);
                 console.log("[FIREBASE SYNC SUCCESS]");
 
-                showToast(`Successfully added  $ ${amount} to your wallet!`, "success");
+                showToast(`Successfully added  ₹ ${amount} to your wallet!`, "success");
                 
                 await push(ref(db, `notifications/${currentUser.uid}`), {
                     title: "Deposit Successful",
-                    message: ` $ ${amount} has been added to your wallet.`,
+                    message: ` ₹ ${amount} has been added to your wallet.`,
                     type: "promo",
                     date: new Date().toISOString()
                 });
@@ -2746,7 +2773,7 @@ html,body{
                         let statusColor = d.status === "Success" ? "var(--success)" : (d.status === "Failed" ? "var(--error)" : "var(--warning)");
                         document.getElementById('res-oid').innerText = d.order_id;
                         document.getElementById('res-status').innerText = d.status; document.getElementById('res-status').style.color = statusColor;
-                        document.getElementById('res-amount').innerText = ` $ ${d.amount}`;
+                        document.getElementById('res-amount').innerText = ` ₹ ${d.amount}`;
                         document.getElementById('res-date').innerText = d.create_at || '-';
                         resultDiv.classList.remove('hidden');
                     },
@@ -2827,8 +2854,8 @@ html,body{
         // --- DYNAMIC DATA ---
         function initContactLinks() {
             onValue(ref(db, 'support_links'), (snap) => {
-                let data = snap.val();
-                if(data) {
+                let data = snap.val() || {};
+                if(true) {
                     const waLink = data.whatsapp || '#';
                     const tgLogin = data.telegram_login || '#';
                     const tgDash = data.telegram_dashboard || '#';
@@ -2844,20 +2871,138 @@ html,body{
                     const mTg = document.getElementById('maint-tg-link');
                     if (mWa) mWa.href = waLink;
                     if (mTg) mTg.href = tgLogin !== '#' ? tgLogin : tgDash;
+                    // How to Buy button — always visible
+                    const htbLink = (data.how_to_buy || '').trim();
+                    const htbBtn = document.getElementById('nav-how-to-buy');
+                    if (htbBtn) {
+                        if (htbLink && htbLink !== '#') {
+                            htbBtn.href = htbLink;
+                            htbBtn.onclick = null;
+                        } else {
+                            htbBtn.href = '#';
+                            htbBtn.onclick = function(e){ e.preventDefault(); if(typeof showToast==='function') showToast('How to Buy link admin ne set nahi kiya', 'warning'); };
+                        }
+                        htbBtn.style.display = 'inline-flex';
+                    }
+                    const sideHtb = document.getElementById('side-how-to-buy');
+                    if (sideHtb) {
+                        sideHtb.classList.remove('hidden');
+                        if (htbLink && htbLink !== '#') {
+                            sideHtb.href = htbLink;
+                            sideHtb.onclick = null;
+                        } else {
+                            sideHtb.href = '#';
+                            sideHtb.onclick = function(e){ e.preventDefault(); if(typeof showToast==='function') showToast('How to Buy link admin ne set nahi kiya', 'warning'); };
+                        }
+                    }
                 }
             });
         }
         initContactLinks();
 
+        // --- TAP / CLICK SOUND (admin controllable) ---
+        const RX_DEFAULT_TAP_SOUND = 'data:audio/mpeg;base64,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';
+        window.__rxTapSound = {
+            enabled: true,
+            muted: (function(){ try { return localStorage.getItem('rx_tap_sound_muted') === '1'; } catch(e){ return false; } })(),
+            url: '',
+            audio: null,
+            unlocked: false
+        };
+        function rxLoadTapSound(url) {
+            const src = (url && String(url).trim()) ? String(url).trim() : RX_DEFAULT_TAP_SOUND;
+            try {
+                const a = new Audio();
+                a.preload = 'auto';
+                a.src = src;
+                a.volume = 0.55;
+                window.__rxTapSound.audio = a;
+                window.__rxTapSound.url = src;
+                a.load();
+            } catch (e) { console.warn('tap sound load failed', e); }
+        }
+        function rxPlayTapSound() {
+            const cfg = window.__rxTapSound;
+            if (!cfg || !cfg.enabled || cfg.muted) return;
+            try {
+                let a = cfg.audio;
+                if (!a) { rxLoadTapSound(cfg.url); a = cfg.audio; }
+                if (!a) return;
+                const s = a.cloneNode();
+                s.volume = a.volume;
+                s.play().catch(()=>{});
+            } catch (e) {}
+        }
+        function rxUpdateTapSoundUI() {
+            const cfg = window.__rxTapSound || {};
+            const muted = !!cfg.muted;
+            const btn = document.getElementById('btn-toggle-tap-sound');
+            const label = document.getElementById('tap-sound-label');
+            const icon = document.getElementById('tap-sound-icon');
+            if (label) label.textContent = muted ? 'MUTED' : 'ON';
+            if (btn) {
+                btn.innerHTML = muted
+                    ? '<i class="fas fa-volume-mute"></i> <span id="tap-sound-label">MUTED</span>'
+                    : '<i class="fas fa-volume-up"></i> <span id="tap-sound-label">ON</span>';
+                btn.style.borderColor = muted ? 'rgba(255,42,95,0.45)' : 'rgba(255,210,26,0.45)';
+                btn.style.color = muted ? '#ff2a5f' : '#ffd21a';
+            }
+            if (icon) {
+                icon.className = muted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
+            }
+        }
+        window.toggleTapSoundMute = function() {
+            const cfg = window.__rxTapSound;
+            if (!cfg) return;
+            cfg.muted = !cfg.muted;
+            try { localStorage.setItem('rx_tap_sound_muted', cfg.muted ? '1' : '0'); } catch(e){}
+            rxUpdateTapSoundUI();
+            if (!cfg.muted) {
+                // preview once when turning ON
+                rxPlayTapSound();
+            }
+            if (typeof showToast === 'function') {
+                showToast(cfg.muted ? 'Tap sound muted' : 'Tap sound enabled', cfg.muted ? 'warning' : 'success');
+            }
+        };
+        // initial UI
+        setTimeout(function(){ try { rxUpdateTapSoundUI(); } catch(e){} }, 300);
+        function rxUnlockTapSound() {
+            if (window.__rxTapSound.unlocked) return;
+            window.__rxTapSound.unlocked = true;
+            try {
+                const a = window.__rxTapSound.audio;
+                if (a) {
+                    const p = a.play();
+                    if (p && p.then) p.then(()=>{ a.pause(); a.currentTime = 0; }).catch(()=>{});
+                }
+            } catch(e) {}
+        }
+        document.addEventListener('pointerdown', function(ev) {
+            rxUnlockTapSound();
+            const t = ev.target;
+            if (!t || !t.closest) return;
+            // play on interactive UI only
+            const hit = t.closest('button, a, .btn, .menu-btn, .rx-side-item, .dropdown-item, .action-btn, .nav-item, .wallet-tab, .how-to-buy-btn, .icon-btn, input[type="submit"], input[type="button"], [onclick], [role="button"]');
+            if (!hit) return;
+            // skip pure text inputs focus
+            if (hit.matches && hit.matches('input[type="text"], input[type="password"], input[type="email"], input[type="number"], input[type="url"], textarea, select')) return;
+            rxPlayTapSound();
+        }, { passive: true });
+
         function initBranding(){
             onValue(ref(db, 'settings/branding'), (snap)=>{
-                const data = snap.val();
-                if(!data) return;
+                const data = snap.val() || {};
                 if(data.name){ document.getElementById('site-name').innerText = data.name; document.getElementById('site-name').style.display = "inline-block"; document.title = data.name + " | PREMIUM"; }
                 if(data.logo && data.logo.length > 5){ const logo = document.getElementById('site-logo'); logo.src = data.logo; logo.style.display = "inline-block"; }
+                // Tap sound settings
+                window.__rxTapSound.enabled = data.tap_sound_enabled !== false && data.tap_sound_enabled !== 'false';
+                const soundUrl = (data.tap_sound_url || '').trim();
+                rxLoadTapSound(soundUrl);
             });
         }
         initBranding();
+        rxLoadTapSound('');
 
         // Website Maintenance Mode
         window.__maintenanceMode = false;
@@ -3069,13 +3214,37 @@ html,body{
             return u + RX_AUTH_DOMAIN;
         }
         function displayNameFromUser(user) {
-            if (!user) return 'User';
-            if (user.username) return user.username;
-            if (user.name && !String(user.name).includes('@')) return user.name;
-            if (user.email) {
-                const e = String(user.email);
-                if (e.endsWith(RX_AUTH_DOMAIN)) return e.replace(RX_AUTH_DOMAIN, '');
-                return e.split('@')[0];
+            if (!user) return '';
+            // Prefer explicit username
+            if (user.username && String(user.username).trim()) return String(user.username).trim();
+            // Prefer name if not an email
+            if (user.name && String(user.name).trim() && !String(user.name).includes('@')) {
+                const n = String(user.name).trim();
+                if (n.toLowerCase() !== 'user' && n.toLowerCase() !== 'account') return n;
+            }
+            // Email → username part (supports @rxpanel.local and normal emails)
+            const email = user.email || (typeof currentUser !== 'undefined' && currentUser && currentUser.email) || '';
+            if (email) {
+                const e = String(email).trim();
+                if (typeof RX_AUTH_DOMAIN !== 'undefined' && e.toLowerCase().endsWith(RX_AUTH_DOMAIN)) {
+                    return e.slice(0, -RX_AUTH_DOMAIN.length);
+                }
+                if (e.includes('@')) return e.split('@')[0];
+                return e;
+            }
+            return '';
+        }
+
+        function resolveSidebarDisplayName() {
+            // 1) From Firebase user profile
+            if (typeof userData !== 'undefined' && userData) {
+                const fromDb = displayNameFromUser(userData);
+                if (fromDb) return fromDb;
+            }
+            // 2) From Firebase Auth currentUser email
+            if (typeof currentUser !== 'undefined' && currentUser) {
+                const fromAuth = displayNameFromUser({ email: currentUser.email, username: currentUser.displayName });
+                if (fromAuth) return fromAuth;
             }
             return 'User';
         }
@@ -3227,7 +3396,7 @@ html,body{
                                 <td><span class="rank-badge ${rankClass}">#${index + 1}</span></td>
                                 <td style="font-weight:600;">${displayUser}</td>
                                 <td>${s.keys}</td>
-                                <td style="color:var(--success); font-weight:bold;"> $ ${s.spent.toFixed(2)}</td>
+                                <td style="color:var(--success); font-weight:bold;"> ₹ ${s.spent.toFixed(2)}</td>
                                 <td>${roleBadge}</td>
                             </tr>
                         `;
@@ -3247,7 +3416,7 @@ html,body{
                         <td><span class="rank-badge rank-1">#1</span></td>
                         <td style="font-weight:600;">${displayUser}</td>
                         <td>${keys}</td>
-                        <td style="color:var(--success); font-weight:bold;"> $ ${spent}</td>
+                        <td style="color:var(--success); font-weight:bold;"> ₹ ${spent}</td>
                         <td>${roleBadge}</td>
                     </tr>
                 `;
@@ -3272,7 +3441,7 @@ html,body{
                         <tr>
                             <td>${rankMedal} ${index + 1}</td>
                             <td>${item.title}</td>
-                            <td style="color:var(--success); font-weight:bold;"> $ ${item.price}</td>
+                            <td style="color:var(--success); font-weight:bold;"> ₹ ${item.price}</td>
                         </tr>
                     `;
                 });
@@ -3311,13 +3480,13 @@ html,body{
                         <td>${u.status === 'active' ? '<span style="color:var(--success);">Active</span>' : '<span style="color:var(--error);">Inactive</span>'}</td>
                         <td id="role-td-${refUid}"><i class="fas fa-spinner fa-spin"></i></td>
                         <td>${purchases}</td>
-                        <td style="color:var(--success);"> $ ${earnings.toFixed(2)}</td>
+                        <td style="color:var(--success);"> ₹ ${earnings.toFixed(2)}</td>
                         <td id="action-td-${refUid}"><i class="fas fa-spinner fa-spin"></i></td>
                     </tr>`;
                 });
                 tbody.innerHTML = html;
                 document.getElementById('reseller-team-count').innerText = count;
-                if(document.getElementById('reseller-total-sales')) document.getElementById('reseller-total-sales').innerText = ` $ ${totalSales.toFixed(2)}`;
+                if(document.getElementById('reseller-total-sales')) document.getElementById('reseller-total-sales').innerText = ` ₹ ${totalSales.toFixed(2)}`;
 
                 // Async fill roles and buttons safely avoiding global read permission issues
                 rowsData.forEach(async (data) => {
@@ -3470,7 +3639,7 @@ html,body{
                             <td>${new Date(c.date).toLocaleDateString()}</td>
                             <td>${c.plan}</td>
                             <td>${c.fromEmail}</td>
-                            <td style="color:var(--success); font-weight: bold;"> $ ${c.amount.toFixed(2)}</td>
+                            <td style="color:var(--success); font-weight: bold;"> ₹ ${c.amount.toFixed(2)}</td>
                             <td><span style="color:var(--success);"><i class="fas fa-check"></i> Credited</span></td>
                         </tr>`;
                     });
@@ -3479,7 +3648,7 @@ html,body{
                 tbody.innerHTML = html;
                 document.getElementById('total-comm-counter').innerText = total.toFixed(2);
                 
-                if(document.getElementById('reseller-total-comm')) document.getElementById('reseller-total-comm').innerText = ` $ ${total.toFixed(2)}`;
+                if(document.getElementById('reseller-total-comm')) document.getElementById('reseller-total-comm').innerText = ` ₹ ${total.toFixed(2)}`;
             });
         }
 
@@ -3525,6 +3694,8 @@ html,body{
             onValue(userRef, async (snapshot) => {
                 if (snapshot.exists()) {
                     userData = snapshot.val();
+                    window.userData = userData;
+                    if (typeof syncRxSidebarUser === 'function') syncRxSidebarUser();
                     
                     console.log("[FIREBASE SYNC SUCCESS]");
 
@@ -3558,15 +3729,16 @@ html,body{
                     // REALTIME DOM UPDATES FOR WALLET
                     document.getElementById('nav-balance').innerText = bal;
                     document.getElementById('prof-bal').innerText = bal;
-                    document.getElementById('wallet-stat-bal').innerText = ` $ ${bal}`;
-                    document.getElementById('dash-stat-bal').innerText = ` $ ${bal}`;
+                    if (typeof syncRxSidebarUser === 'function') syncRxSidebarUser();
+                    document.getElementById('wallet-stat-bal').innerText = ` ₹ ${bal}`;
+                    document.getElementById('dash-stat-bal').innerText = ` ₹ ${bal}`;
                     document.getElementById('prof-email').innerText = userData.email;
                     
-                    document.getElementById('prof-name').innerText = userData.name || userData.email.split('@')[0];
+                    document.getElementById('prof-name').innerText = (typeof displayNameFromUser === 'function' ? displayNameFromUser(userData) : null) || userData.username || userData.name || (userData.email ? String(userData.email).split('@')[0] : 'User');
                     document.getElementById('prof-uid').innerText = currentUser.uid;
                     document.getElementById('prof-ref-code').innerText = userData.referralCode || "N/A";
                     document.getElementById('reseller-code-display').innerText = userData.referralCode || "N/A";
-                    if(document.getElementById('reseller-avail-bal')) document.getElementById('reseller-avail-bal').innerText = ` $ ${bal}`;
+                    if(document.getElementById('reseller-avail-bal')) document.getElementById('reseller-avail-bal').innerText = ` ₹ ${bal}`;
 
                     document.getElementById('dash-stat-role').innerText = window.isReseller ? (userData.role === 'admin' ? "ADMIN" : "RESELLER") : "USER";
                     document.getElementById('dash-stat-role').style.color = window.isReseller ? "var(--neon-cyan)" : "white";
@@ -3594,11 +3766,11 @@ html,body{
                         if(tx.status === 'success' && tx.type === 'purchase') { totalSpent += parseFloat(tx.amount); }
                     });
                 }
-                document.getElementById('wallet-stat-dep').innerText = ` $ ${totalDep.toFixed(2)}`;
-                document.getElementById('wallet-stat-today').innerText = ` $ ${todayDep.toFixed(2)}`;
-                document.getElementById('wallet-stat-pending').innerText = ` $ ${pendingDep.toFixed(2)}`;
+                document.getElementById('wallet-stat-dep').innerText = ` ₹ ${totalDep.toFixed(2)}`;
+                document.getElementById('wallet-stat-today').innerText = ` ₹ ${todayDep.toFixed(2)}`;
+                document.getElementById('wallet-stat-pending').innerText = ` ₹ ${pendingDep.toFixed(2)}`;
                 document.getElementById('prof-spent').innerText = totalSpent.toFixed(2);
-                document.getElementById('dash-stat-spent').innerText = ` $ ${totalSpent.toFixed(2)}`;
+                document.getElementById('dash-stat-spent').innerText = ` ₹ ${totalSpent.toFixed(2)}`;
             });
         }
 
@@ -3663,13 +3835,30 @@ html,body{
 
 
         function syncRxSidebarUser(){
-            const name = (window.userData && (userData.name || userData.username || userData.email)) || 'Account';
-            const role = (window.userData && userData.role) || 'User';
-            const balance = (window.userData && userData.balance != null) ? Number(userData.balance).toFixed(2) : (document.getElementById('nav-balance')?.innerText || '0.00');
-            const n=document.getElementById('rx-side-name'), r=document.getElementById('rx-side-role'), b=document.getElementById('rx-side-balance'), a=document.getElementById('rx-side-avatar');
-            if(n) n.textContent=name; if(r) r.textContent=role; if(b) b.textContent=balance; if(a) a.textContent=(name.charAt(0)||'R').toUpperCase();
+            const u = (typeof userData !== 'undefined' && userData) ? userData : (window.userData || {});
+            const name = (typeof resolveSidebarDisplayName === 'function' ? resolveSidebarDisplayName() : null) || displayNameFromUser(u) || 'User';
+            let role = 'User';
+            if (u.role === 'admin') role = 'Admin';
+            else if (u.role === 'master_reseller' || u.role === 'master') role = 'Master';
+            else if (u.role === 'sub_reseller' || u.role === 'sub') role = 'Sub Reseller';
+            else if (u.role === 'reseller' || u.resellerStatus === 'active') role = 'Reseller';
+            else role = 'User';
+            let balance = '0.00';
+            if (u.balance != null && u.balance !== '') balance = Number(u.balance).toFixed(2);
+            else {
+                const navBal = document.getElementById('nav-balance');
+                if (navBal && navBal.innerText) balance = navBal.innerText.trim();
+            }
+            const n=document.getElementById('rx-side-name');
+            const r=document.getElementById('rx-side-role');
+            const b=document.getElementById('rx-side-balance');
+            const a=document.getElementById('rx-side-avatar');
+            if (n) n.textContent = name;
+            if (r) r.textContent = role;
+            if (b) b.textContent = balance;
+            if (a) a.textContent = (name && name !== 'User' ? name.charAt(0) : 'U').toUpperCase();
         }
-        setInterval(syncRxSidebarUser, 1200);
+        setInterval(syncRxSidebarUser, 800);
         syncRxSidebarUser();
 
         // PROFILE ENHANCEMENTS
@@ -3755,7 +3944,7 @@ html,body{
                         <div class="panel-title">${p.name}</div>
                         <div class="sp-meta">
                             <span class="sp-review"><i class="fas fa-star" style="color:#ffd21a"></i> 5.0 (1) Reviews</span>
-                            <span class="sp-price">${lowestPrice !== null ? 'From $' + lowestPrice.toFixed(2) : 'Available'}</span>
+                            <span class="sp-price">${lowestPrice !== null ? 'From ₹' + lowestPrice.toFixed(2) : 'Available'}</span>
                         </div>
                         <div class="features-list">${featuresHtml}</div>
                         <div class="btn-grid">
@@ -3806,7 +3995,7 @@ html,body{
                     const stockText = stockCount > 0 ? `(Stock: ${stockCount})` : `(OUT OF STOCK)`;
                     const opt = document.createElement('option');
                     opt.value = JSON.stringify({key:planKey,label:labelText,price:finalPrice,stock:stockCount,origPrice:planData.price});
-                    opt.textContent = `${labelText} - $ ${Number(finalPrice||0).toFixed(2)} ${stockText}`;
+                    opt.textContent = `${labelText} - ₹ ${Number(finalPrice||0).toFixed(2)} ${stockText}`;
                     opt.disabled = stockCount <= 0;
                     if(planKey === currentVal && stockCount > 0) opt.selected = true;
                     selectEl.appendChild(opt);
@@ -3819,6 +4008,26 @@ html,body{
         window.handlePlanChange = (panelId,totalAvailable) => {
             const selectEl=document.getElementById(`plan-${panelId}`), btn=document.getElementById(`btn-buy-${panelId}`), badge=document.getElementById(`badge-stock-${panelId}`);
             if(!selectEl || !btn) return;
+            // Maintenance panels must stay as MAINTENANCE — never overwrite with OUT OF STOCK
+            const panel = window.panelsDataCache && window.panelsDataCache[panelId];
+            if (panel && (panel.maintenance === true || panel.maintenance === 'true' || panel.maintenance === 1)) {
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-tools"></i> UNDER MAINTENANCE';
+                btn.style.background = 'rgba(255,184,0,0.15)';
+                btn.style.border = '1px solid rgba(255,184,0,0.45)';
+                btn.style.color = '#ffb800';
+                btn.style.cursor = 'not-allowed';
+                btn.style.opacity = '1';
+                btn.style.filter = 'none';
+                btn.className = 'btn premium-btn';
+                btn.onclick = null;
+                if (badge) {
+                    badge.className = 'badge-item';
+                    badge.style.color = '#ffb800';
+                    badge.innerHTML = '<i class="fas fa-tools"></i> MAINTENANCE';
+                }
+                return;
+            }
             let data=null; try{ if(selectEl.value) data=JSON.parse(selectEl.value); }catch(e){}
             const stock=data?Number(data.stock||0):0;
             if(Number(totalAvailable||0)<=0 || !data || stock<=0){
@@ -3832,7 +4041,7 @@ html,body{
 
 // RX BUY MODAL FLOW
 window.rxBuyState={};
-window.openRxBuyModal=function(panelId){const p=window.panelsDataCache&&window.panelsDataCache[panelId];if(!p)return showToast('Product data not available','error');if(p.maintenance)return showToast('This product is under maintenance','warning');document.getElementById('rx-buy-cat').textContent=p.type||'PANEL';document.getElementById('rx-buy-name').textContent=p.name||'PRODUCT';document.getElementById('rx-buy-device').textContent=p.device||p.deviceType||'Non Root Device';const grid=document.getElementById('rx-buy-plans');grid.innerHTML='';const plans=p.plans?Object.entries(p.plans).sort((a,b)=>Number(a[1].days||0)-Number(b[1].days||0)):[];let firstAvailableKey=null;plans.forEach(([key,d])=>{const price=window.isReseller&&d.resellerPrice!==undefined?Number(d.resellerPrice):Number(d.price||0);let label=d.label||((d.days||'')+' Days');if(label==='undefined Days')label='Premium Plan';const stock=window.getPlanStockCount(panelId,key);const out=stock<=0;const b=document.createElement('button');b.type='button';b.className='rx-buy-plan'+(out?' rx-out-stock':'');b.dataset.key=key;b.disabled=out;b.innerHTML='<span class="rx-buy-plan-label">'+label+'</span><span class="rx-buy-plan-price">'+(out?'OUT OF STOCK':'$'+price.toFixed(2))+'</span><span class="rx-buy-radio"></span>';if(!out){b.onclick=()=>window.selectRxBuyPlan(panelId,key);if(firstAvailableKey===null)firstAvailableKey=key;}grid.appendChild(b);});document.getElementById('rx-buy-modal').classList.remove('hidden');document.body.style.overflow='hidden';if(firstAvailableKey!==null){const d=p.plans[firstAvailableKey];const price=window.isReseller&&d.resellerPrice!==undefined?Number(d.resellerPrice):Number(d.price||0);let label=d.label||((d.days||'')+' Days');if(label==='undefined Days')label='Premium Plan';window.setRxBuyState(panelId,firstAvailableKey,p,label,price,Number(d.price||price));document.querySelectorAll('#rx-buy-plans .rx-buy-plan').forEach(x=>x.classList.toggle('active',x.dataset.key===firstAvailableKey));}else{window.rxBuyState={};document.getElementById('rx-buy-selected-label').textContent='OUT OF STOCK';document.getElementById('rx-buy-selected-price').textContent='—';}};
+window.openRxBuyModal=function(panelId){const p=window.panelsDataCache&&window.panelsDataCache[panelId];if(!p)return showToast('Product data not available','error');if(p.maintenance)return showToast('This product is under maintenance','warning');document.getElementById('rx-buy-cat').textContent=p.type||'PANEL';document.getElementById('rx-buy-name').textContent=p.name||'PRODUCT';document.getElementById('rx-buy-device').textContent=p.device||p.deviceType||'Non Root Device';const grid=document.getElementById('rx-buy-plans');grid.innerHTML='';const plans=p.plans?Object.entries(p.plans).sort((a,b)=>Number(a[1].days||0)-Number(b[1].days||0)):[];let firstAvailableKey=null;plans.forEach(([key,d])=>{const price=window.isReseller&&d.resellerPrice!==undefined?Number(d.resellerPrice):Number(d.price||0);let label=d.label||((d.days||'')+' Days');if(label==='undefined Days')label='Premium Plan';const stock=window.getPlanStockCount(panelId,key);const out=stock<=0;const b=document.createElement('button');b.type='button';b.className='rx-buy-plan'+(out?' rx-out-stock':'');b.dataset.key=key;b.disabled=out;b.innerHTML='<span class="rx-buy-plan-label">'+label+'</span><span class="rx-buy-plan-price">'+(out?'OUT OF STOCK':' ₹ '+price.toFixed(2))+'</span><span class="rx-buy-radio"></span>';if(!out){b.onclick=()=>window.selectRxBuyPlan(panelId,key);if(firstAvailableKey===null)firstAvailableKey=key;}grid.appendChild(b);});document.getElementById('rx-buy-modal').classList.remove('hidden');document.body.style.overflow='hidden';if(firstAvailableKey!==null){const d=p.plans[firstAvailableKey];const price=window.isReseller&&d.resellerPrice!==undefined?Number(d.resellerPrice):Number(d.price||0);let label=d.label||((d.days||'')+' Days');if(label==='undefined Days')label='Premium Plan';window.setRxBuyState(panelId,firstAvailableKey,p,label,price,Number(d.price||price));document.querySelectorAll('#rx-buy-plans .rx-buy-plan').forEach(x=>x.classList.toggle('active',x.dataset.key===firstAvailableKey));}else{window.rxBuyState={};document.getElementById('rx-buy-selected-label').textContent='OUT OF STOCK';document.getElementById('rx-buy-selected-price').textContent='—';}};
 window.setRxBuyState=function(panelId,key,p,label,price,orig){window.rxBuyState={panelId,planKey:key,panelName:p.name||'',link:p.link||'',label,price,originalPrice:orig};window.refreshRxBuySummary()};
 window.selectRxBuyPlan=function(panelId,key){const p=window.panelsDataCache[panelId],d=p&&p.plans&&p.plans[key];if(!d)return;const stock=window.getPlanStockCount(panelId,key);if(stock<=0)return showToast('This plan is OUT OF STOCK','warning');const price=window.isReseller&&d.resellerPrice!==undefined?Number(d.resellerPrice):Number(d.price||0);let label=d.label||((d.days||'')+' Days');if(label==='undefined Days')label='Premium Plan';window.setRxBuyState(panelId,key,p,label,price,Number(d.price||price));document.querySelectorAll('#rx-buy-plans .rx-buy-plan').forEach(x=>x.classList.toggle('active',x.dataset.key===key));};
 window.refreshRxBuySummary=function(){const s=window.rxBuyState;document.getElementById('rx-buy-selected-label').textContent=s.label||'PLAN';document.getElementById('rx-buy-selected-price').textContent=Number(s.price||0).toFixed(2)};
@@ -3869,7 +4078,7 @@ window.addRxPlanToCart=function(){const s=window.rxBuyState;if(!s.planKey)return
                         row.innerHTML = `
                             <div style="color:white; font-weight:800; font-size:13px; text-transform:uppercase; letter-spacing:0.5px;">
                                 ${labelText} <br/>
-                                <span style="color:${outOfStock ? '#ff2a5f' : '#ff3b3b'}; font-size: 15px; display:inline-block; margin-top:3px;"> ${outOfStock ? 'OUT OF STOCK' : '$ ' + finalPrice}</span>
+                                <span style="color:${outOfStock ? '#ff2a5f' : '#ff3b3b'}; font-size: 15px; display:inline-block; margin-top:3px;"> ${outOfStock ? 'OUT OF STOCK' : '₹ ' + finalPrice}</span>
                             </div>
                             <button class="btn-red-buy" ${outOfStock ? 'disabled style="opacity:.55;cursor:not-allowed;background:rgba(255,42,95,.12);border-color:rgba(255,42,95,.45);color:#ff2a5f;"' : `onclick="window.executeFromPriceList('${panelId}', '${panelName.replace(/'/g, "\\'")}', '${link}', '${planKey}', ${finalPrice}, '${labelText}', ${planData.price})"`}>${outOfStock ? 'OUT OF STOCK' : 'BUY'}</button>
                         `;
@@ -3981,7 +4190,7 @@ window.addRxPlanToCart=function(){const s=window.rxBuyState;if(!s.planKey)return
 
                     document.getElementById('chk-final-price').innerText = discountedPrice.toFixed(2);
                     let strikeEl = document.getElementById('chk-strike-price');
-                    strikeEl.innerText = ' $ ' + price.toFixed(2);
+                    strikeEl.innerText = ' ₹ ' + price.toFixed(2);
                     strikeEl.classList.remove('hidden');
 
                     let badgeEl = document.getElementById('chk-discount-badge');
@@ -4001,7 +4210,7 @@ window.addRxPlanToCart=function(){const s=window.rxBuyState;if(!s.planKey)return
             const btn = document.getElementById('btn-confirm-pay');
 
             if (userData.balance < priceToPay) {
-                return showToast(`Insufficient balance. Need  $ ${priceToPay.toFixed(2)}`, "error");
+                return showToast(`Insufficient balance. Need  ₹ ${priceToPay.toFixed(2)}`, "error");
             }
 
             showLoader();
@@ -4123,7 +4332,7 @@ window.addRxPlanToCart=function(){const s=window.rxBuyState;if(!s.planKey)return
                         
                         await push(ref(db, `notifications/${userData.parentResellerUid}`), {
                             title: "New Commission Received!",
-                            message: `You earned  $ ${commissionAmount.toFixed(2)} from ${currentUser.email}`,
+                            message: `You earned  ₹ ${commissionAmount.toFixed(2)} from ${currentUser.email}`,
                             type: "promo",
                             date: new Date().toISOString()
                         });
@@ -4233,7 +4442,7 @@ window.addRxPlanToCart=function(){const s=window.rxBuyState;if(!s.planKey)return
                                 <tr>
                                     <td>${dateStr}</td>
                                     <td>${p.panelName}</td>
-                                    <td style="color:var(--neon-cyan);"> $ ${p.price.toFixed(2)}</td>
+                                    <td style="color:var(--neon-cyan);"> ₹ ${p.price.toFixed(2)}</td>
                                     <td>${statusHtml}</td>
                                 </tr>
                             `;
@@ -4260,7 +4469,7 @@ window.addRxPlanToCart=function(){const s=window.rxBuyState;if(!s.planKey)return
                                     <td>${new Date(p.date).toLocaleDateString()}</td>
                                     <td>${p.panelName}</td>
                                     <td>${displayLabel}</td>
-                                    <td style="color:var(--neon-cyan); font-weight:bold;"> $ ${p.price.toFixed(2)}</td>
+                                    <td style="color:var(--neon-cyan); font-weight:bold;"> ₹ ${p.price.toFixed(2)}</td>
                                     <td>${statusHtml}</td>
                                 </tr>
                             `;
@@ -4295,7 +4504,7 @@ window.addRxPlanToCart=function(){const s=window.rxBuyState;if(!s.planKey)return
                                         <p><i class="fas fa-tag"></i> ${displayLabel} | ${dateStr}</p>
                                         <div style="margin-top: 8px;">${deliveryBadgeHtml}</div>
                                     </div>
-                                    <div class="hist-price"> $ ${p.price.toFixed(2)}</div>
+                                    <div class="hist-price"> ₹ ${p.price.toFixed(2)}</div>
                                 </div>
                                 ${keyBoxHtml}
                             `;
